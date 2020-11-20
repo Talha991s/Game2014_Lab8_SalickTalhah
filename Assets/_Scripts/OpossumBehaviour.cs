@@ -28,12 +28,14 @@ public class OpossumBehaviour : MonoBehaviour
     [Header("Bullet Firing")]
     public float fireDelay;
     public Transform BulletSpawn;
+    public PlayerBehaviour player;
 
     // Start is called before the first frame update
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         rampDirection = RampDirection.NONE;
+        player = GameObject.FindObjectOfType<PlayerBehaviour>();
     }
 
     // Update is called once per frame
@@ -52,7 +54,11 @@ public class OpossumBehaviour : MonoBehaviour
         //delay bullet firing
         if (Time.frameCount % fireDelay == 0 && BulletManager.Instance().HasBullets())
         {
-            BulletManager.Instance().GetBullet(BulletSpawn.position);
+            var playerPosition= player.transform.position;
+
+            var firingDirection = Vector3.Normalize( playerPosition - BulletSpawn.position);
+
+            BulletManager.Instance().GetBullet(BulletSpawn.position,firingDirection);
         }
 
        
